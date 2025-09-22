@@ -39,7 +39,12 @@ void save()
 
 int main()
 {
-    /*main function*/
+    /*
+     *
+     * main function
+     *
+     *
+     * */
     
     while(true)
     {
