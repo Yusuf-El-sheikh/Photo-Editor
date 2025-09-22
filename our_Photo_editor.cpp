@@ -34,6 +34,15 @@ void filter()
 void save()
 {
     /*no need to explain this one lol*/
+
+    cout << "Please enter a new name for the saved file! \n" ;
+
+    string imagename2 ;
+
+    cin >> imagename2 ;
+
+    image.saveImage(imagename2) ;
+
 }
 
 
