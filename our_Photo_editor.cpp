@@ -41,8 +41,6 @@ void save()
 
     cin >> imagename2 ;
 
-    Image image2 = image ;
-
     image.saveImage(imagename2) ;
 
 }
