@@ -39,6 +39,8 @@ void save()
 
 int main()
 {
+    /*main function*/
+    
     while(true)
     {
         int choice ;
