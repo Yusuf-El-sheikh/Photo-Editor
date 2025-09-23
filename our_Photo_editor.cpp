@@ -6,6 +6,8 @@ string imagename ;
 
 Image image ;
 
+Image editedimage;
+
 void load()
 {
     /*image loading function*/
@@ -26,10 +28,26 @@ void load()
     }
 }
 
-void filter()
-{
-    /*filter applying function*/
-}
+class filter {
+  public:
+    
+  void blackandwhite(Image* img, unsigned char threshold) {
+      int value = 0;
+      for(int y = 0; y < img->height; y++) {
+          for (int x = 0; x < img->width; x++) {
+            value = (int)img->getPixel(x, y, 0) + (int)img->getPixel(x, y, 1) + (int)img->getPixel(x,y, 2);
+            value /= 3;
+	    value <= threshold ? value = 0 : value = 255;
+	    img->setPixel(x, y, 0, (unsigned char)value);
+	    img->setPixel(x, y, 1, (unsigned char)value);
+	    img->setPixel(x, y, 2, (unsigned char)value);
+	 
+          }
+      }
+  }        
+};
+  
+
 
 void save()
 {
@@ -49,7 +67,7 @@ void save()
 int main()
 {
     /*  main function  */
-    
+    filter filtermaker;
     while(true)
     {
         int choice ;
@@ -67,10 +85,11 @@ int main()
         if(choice == 1)
         {
             load() ;
-        }
-        else if(choice == 2)
-        {
-            filter() ;
+        } else if (choice == 2) {
+	    cout<< "Enter threshold:";
+	    int threshold; cin>>threshold;
+	    filtermaker.blackandwhite(&image, threshold);
+	    cout << "\nFilter applied successfully!\n";
         }
         else if(choice == 3)
         {
