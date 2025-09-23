@@ -66,15 +66,8 @@ void save()
 
 int main()
 {
-<<<<<<< HEAD
     /*  main function  */
     filter filtermaker;
-=======
-    /*  
-    main function  
-    */
-    
->>>>>>> a55b1dc50ac365f4fb1623b761b74207d8c263ca
     while(true)
     {
         int choice ;
@@ -93,10 +86,16 @@ int main()
         {
             load() ;
         } else if (choice == 2) {
-	    cout<< "Enter threshold:";
-	    int threshold; cin>>threshold;
-	    filtermaker.blackandwhite(&image, threshold);
-	    cout << "\nFilter applied successfully!\n";
+            cout << "Choose a filter:\n2. Black and White\n";
+            int filterchoice; cin>>filterchoice;
+            switch (filterchoice) {
+	    case 2:
+	      cout<< "Enter threshold:";
+	      int threshold; cin>>threshold;
+	      filtermaker.blackandwhite(&image, threshold);
+              cout << "\nFilter applied successfully!\n";
+	      break;
+	    }            
         }
         else if(choice == 3)
         {
