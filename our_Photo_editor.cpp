@@ -66,8 +66,15 @@ void save()
 
 int main()
 {
+<<<<<<< HEAD
     /*  main function  */
     filter filtermaker;
+=======
+    /*  
+    main function  
+    */
+    
+>>>>>>> a55b1dc50ac365f4fb1623b761b74207d8c263ca
     while(true)
     {
         int choice ;
