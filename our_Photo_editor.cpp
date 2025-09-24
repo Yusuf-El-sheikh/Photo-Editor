@@ -47,14 +47,23 @@ class filter {
 
   Image flip(Image img, bool direction){
     Image flipped = img;
-    for(int x = 0; x<flipped.width; x++){
-      for(int y = 0; y<flipped.height; y++){
-        for(int k = 0; k<3; k++){
-          flipped.setPixel(x, y, k, img.getPixel(img.width - x, y, k));
+    if(direction){
+      for(int x = 0; x<flipped.width; x++){
+        for(int y = 0; y<flipped.height; y++){
+          for(int k = 0; k<3; k++){
+            flipped.setPixel(x, y, k, img.getPixel(img.width - x, y, k));
+          }
+        }
+      }
+    } else {
+      for(int x = 0; x<flipped.width; x++){
+        for(int y = 0; y<flipped.height; y++){
+          for(int k = 0; k<3; k++){
+            flipped.setPixel(x, y, k, img.getPixel(x, img.height - y, k));
+          }
         }
       }
     }
-    cout<< flipped.width;
     return flipped;
   }
 
@@ -99,20 +108,22 @@ int main()
         {
             load() ;
         } else if (choice == 2) {
-            cout << "Choose a filter:\n2. Black and White\n";
+            cout << "Choose a filter:\n2. Black and White\n5. Flip horizontal/vertical\n";
             int filterchoice; cin>>filterchoice;
             switch (filterchoice) {
 	            case 2:
 	            cout<< "Enter threshold:";
 	            int threshold; cin>>threshold;
 	            filtermaker.blackandwhite(&image, threshold);
-              cout << "\nFilter applied successfully!\n";
 	            break;
 
               case 5:
-              editedimage = filtermaker.flip(image, 1);
+              cout<<"Flip vertically or horizontally?\n1. Vertically  2. horizontally\n";
+              int dir; cin>>dir;
+              editedimage = filtermaker.flip(image, (bool)(dir - 1));
               break;
 	          }             
+            cout << "\nFilter applied successfully!\n";
         }
         else if(choice == 3)
         {
