@@ -37,14 +37,27 @@ class filter {
           for (int x = 0; x < img->width; x++) {
             value = (int)img->getPixel(x, y, 0) + (int)img->getPixel(x, y, 1) + (int)img->getPixel(x,y, 2);
             value /= 3;
-	    value <= threshold ? value = 0 : value = 255;
-	    img->setPixel(x, y, 0, (unsigned char)value);
-	    img->setPixel(x, y, 1, (unsigned char)value);
-	    img->setPixel(x, y, 2, (unsigned char)value);
-	 
+	          value <= threshold ? value = 0 : value = 255;
+	          img->setPixel(x, y, 0, (unsigned char)value);
+	          img->setPixel(x, y, 1, (unsigned char)value);
+	          img->setPixel(x, y, 2, (unsigned char)value); 
           }
       }
-  }        
+  }    
+
+  Image flip(Image img, bool direction){
+    Image flipped = img;
+    for(int x = 0; x<flipped.width; x++){
+      for(int y = 0; y<flipped.height; y++){
+        for(int k = 0; k<3; k++){
+          flipped.setPixel(x, y, k, img.getPixel(img.width - x, y, k));
+        }
+      }
+    }
+    cout<< flipped.width;
+    return flipped;
+  }
+
 };
   
 
@@ -59,7 +72,7 @@ void save()
 
     cin >> imagename2 ;
 
-    image.saveImage(imagename2) ;
+    editedimage.saveImage(imagename2) ;
 
 }
 
@@ -95,6 +108,10 @@ int main()
 	            filtermaker.blackandwhite(&image, threshold);
               cout << "\nFilter applied successfully!\n";
 	            break;
+
+              case 5:
+              editedimage = filtermaker.flip(image, 1);
+              break;
 	          }             
         }
         else if(choice == 3)
