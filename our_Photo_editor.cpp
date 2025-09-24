@@ -30,7 +30,20 @@ void load()
 
 class filter {
   public:
-    
+    void grayscale(Image* Grayscale){
+      for(int i = 0; i<Grayscale->width; i++){
+        for(int j = 0; j<Grayscale->height; j++){
+          unsigned int num = 0;
+          for(int k = 0; k<Grayscale->channels; k++){
+            num += Grayscale->operator()(i, j, k);
+          }
+          num /=3;
+          for(int k = 0; k<3; k++){
+            Grayscale->operator()(i, j, k) = num;
+          }
+        }
+      }
+    }
   void blackandwhite(Image* img, unsigned char threshold) {
       int value = 0;
       for(int y = 0; y < img->height; y++) {
@@ -111,6 +124,9 @@ int main()
             cout << "Choose a filter:\n2. Black and White\n5. Flip horizontal/vertical\n";
             int filterchoice; cin>>filterchoice;
             switch (filterchoice) {
+              case 1:
+              filtermaker.grayscale(&image);
+              break;
 	            case 2:
 	            cout<< "Enter threshold:";
 	            int threshold; cin>>threshold;
