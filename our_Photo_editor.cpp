@@ -89,13 +89,13 @@ int main()
             cout << "Choose a filter:\n2. Black and White\n";
             int filterchoice; cin>>filterchoice;
             switch (filterchoice) {
-	    case 2:
-	      cout<< "Enter threshold:";
-	      int threshold; cin>>threshold;
-	      filtermaker.blackandwhite(&image, threshold);
+	            case 2:
+	            cout<< "Enter threshold:";
+	            int threshold; cin>>threshold;
+	            filtermaker.blackandwhite(&image, threshold);
               cout << "\nFilter applied successfully!\n";
-	      break;
-	    }            
+	            break;
+	          }             
         }
         else if(choice == 3)
         {
