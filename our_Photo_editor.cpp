@@ -30,7 +30,7 @@ void load()
 
 class filter {
   public:
-    void grayscale(Image* Grayscale){
+  void grayscale(Image* Grayscale){
       for(int i = 0; i<Grayscale->width; i++){
         for(int j = 0; j<Grayscale->height; j++){
           unsigned int num = 0;
@@ -43,6 +43,7 @@ class filter {
           }
         }
       }
+      editedimage = *Grayscale ;
     }
   void blackandwhite(Image* img, unsigned char threshold) {
       int value = 0;
@@ -56,6 +57,7 @@ class filter {
 	          img->setPixel(x, y, 2, (unsigned char)value); 
           }
       }
+      editedimage = *img ;
   }    
 
   Image flip(Image img, bool direction){
@@ -78,6 +80,48 @@ class filter {
       }
     }
     return flipped;
+   }
+
+  void negative(Image temp)
+  {
+    temp = image ;
+
+    for(int h = 0 ; h < temp.height ; h++)
+    {
+      for(int w = 0 ; w < temp.width ; w++)
+      {
+        for(int c = 0 ; c < temp.channels ; c++)
+        {
+          unsigned char val = temp.getPixel(w , h , c) ;
+
+          temp.setPixel(w , h , c , 255 - val) ;
+        }
+      }
+    }
+    editedimage = temp ;
+  }
+
+  void rotate()
+  {
+    int nw = image.height , nh = image.width ;
+
+    Image rot(nw , nh) ;
+
+    for(int h = 0 ; h < image.height ; h++)
+    {
+      for(int w = 0 ; w < image.width ; w++)
+      {
+        for(int c = 0 ; c < image.channels ; c++)
+        {
+          unsigned char val = image.getPixel(w , h , c) ;
+
+          rot.setPixel(nw - 1 - h , w , c , val) ;
+        }
+      }
+    }
+    image = rot ;
+    
+    editedimage = image;
   }
 
 };
@@ -101,82 +145,143 @@ void save()
 
 int main()
 {
-    /*  main function  */
-    filter filtermaker;
-    while(true)
+  /*  main function  */
+
+  filter filtermaker;
+  
+  while(true)
+  {
+    int choice ;
+
+    cout << "1 - Load an image \n" ;
+    
+    cout << "2 - Apply a filter \n" ;
+
+    cout << "3 - Save image \n" ;
+
+    cout << "4 - Exit \n" ;
+
+    cin >> choice ;
+
+    if(choice == 1)
     {
-        int choice ;
+      load() ;
+    } 
+    else if (choice == 2) 
+    {
+      cout << "Choose a filter:\n" ;
+      
+      cout << "1. Grayscale\n" ;
 
-        cout << "1 - Load an image \n" ;
+      cout << "2. Black and White\n" ;
+      
+      cout << "3. Negative color\n" ;
+      
+      cout << "5. Flip horizontal/vertical\n" ;
+      
+      cout << "6. Rotate\n" ;
+
+      int filterchoice ; cin >> filterchoice ;
+
+      switch (filterchoice) 
+      {
+        case 1:
+
+        filtermaker.grayscale(&image);
+
+        break;
+
+        case 2:
+
+        cout<< "Enter threshold:";
+
+        int threshold; cin>>threshold;
+
+        filtermaker.blackandwhite(&image, threshold);
+
+        break;
+
+        case 3:
+
+        filtermaker.negative(image) ;
+
+        break;
+
+        case 5:
+
+        cout<<"Flip vertically or horizontally?\n1. Vertically  2. horizontally\n";
+
+        int dir; cin>>dir;
         
-        cout << "2 - Apply a filter \n" ;
+        editedimage = filtermaker.flip(image, (bool)(dir - 1));
+        
+        break;
 
-        cout << "3 - Save image \n" ;
+        case 6:
 
-        cout << "4 - Exit \n" ;
+        cout << "Which rotation do you want ?\n" ;
 
-        cin >> choice ;
+        cout << "1. 90 degrees\n" ;
 
-        if(choice == 1)
+        cout<< "2. 180 degrees\n" ;
+
+        cout << "3. 270 degrees\n" ;
+        
+        int deg ;
+        
+        cin >> deg ;
+        
+        for(int i = 0 ; i < deg ; i++)
         {
-            load() ;
-        } else if (choice == 2) {
-            cout << "Choose a filter:\n2. Black and White\n5. Flip horizontal/vertical\n";
-            int filterchoice; cin>>filterchoice;
-            switch (filterchoice) {
-              case 1:
-              filtermaker.grayscale(&image);
-              break;
-	            case 2:
-	            cout<< "Enter threshold:";
-	            int threshold; cin>>threshold;
-	            filtermaker.blackandwhite(&image, threshold);
-	            break;
 
-              case 5:
-              cout<<"Flip vertically or horizontally?\n1. Vertically  2. horizontally\n";
-              int dir; cin>>dir;
-              editedimage = filtermaker.flip(image, (bool)(dir - 1));
-              break;
-	          }             
-            cout << "\nFilter applied successfully!\n";
+          filtermaker.rotate() ;
+
         }
-        else if(choice == 3)
+        
+        break;
+
+      }
+      
+      cout << "\nFilter applied successfully!\n";
+    }
+
+    else if(choice == 3)
+    {
+      save() ;
+    }
+
+    else if(choice == 4)
+    {
+      while(true)
+      {
+        int choice2 ;
+
+        cout << "Do you want to save before you exit ? \n" ;
+        
+        cout << "1 - Yes \n" << "2 - No \n" ;
+
+        cin >> choice2 ;
+
+        if(choice2 == 1)
         {
-            save() ;
+          save() ;
+            
+          return 0 ;
         }
-        else if(choice == 4)
+        else if(choice2 == 2)
         {
-            while(true)
-            {
-                int choice2 ;
-
-                cout << "Do you want to save before you exit ? \n" ;
-                
-                cout << "1 - Yes \n" << "2 - No \n" ;
-
-                cin >> choice2 ;
-
-                if(choice2 == 1)
-                {
-                    save() ;
-                    
-                    return 0 ;
-                }
-                else if(choice2 == 2)
-                {
-                    return 0 ;
-                }
-                else
-                {
-                    cout << "Error , please choose an existing option \n" ;
-                }
-            }
+          return 0 ;
         }
         else
         {
-            cout << "Error , please enter an existing option\n" ;
+          cout << "Error , please choose an existing option \n" ;
         }
+      }
     }
-    return 0 ;
+    else
+    {
+      cout << "Error , please enter an existing option\n" ;
+    }
+  }
+  return 0 ;
 }
