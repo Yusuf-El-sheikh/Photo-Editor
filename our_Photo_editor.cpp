@@ -36,48 +36,55 @@ void load()
 class filter
 {
 public:
-  void grayscale(Image *Grayscale)
+  /* grayscale filter: goes over every pixel, gets the average of the RGB channels and 
+   * sets them to that average, making it grayscale.*/
+  void grayscale()
   {
-    for (int i = 0; i < Grayscale->width; i++)
+    for (int i = 0; i < image.width; i++)
     {
-      for (int j = 0; j < Grayscale->height; j++)
+      for (int j = 0; j < image.height; j++)
       {
         unsigned int num = 0;
-        for (int k = 0; k < Grayscale->channels; k++)
+        for (int k = 0; k < image.channels; k++)
         {
-          num += Grayscale->operator()(i, j, k);
+          num += image(i, j, k);
         }
         num /= 3;
         for (int k = 0; k < 3; k++)
         {
-          Grayscale->operator()(i, j, k) = num;
+          image(i, j, k) = num;
         }
       }
     }
-    editedimage = *Grayscale;
+    editedimage = image;
   }
-
-  void blackandwhite(Image *img, unsigned char threshold)
+  /* Same as the the grayscale filter, but the function takes a threshold
+   * if the average value of a pixel is below that threshold, it becomes black,
+   * and if its above, it become white.*/
+  void blackandwhite(unsigned char threshold)
   {
     int value = 0;
-    for (int y = 0; y < img->height; y++)
+    for (int y = 0; y < image.height; y++)
     {
-      for (int x = 0; x < img->width; x++)
+      for (int x = 0; x < image.width; x++)
       {
-        value = (int)img->getPixel(x, y, 0) + (int)img->getPixel(x, y, 1) + (int)img->getPixel(x, y, 2);
+        value = (int)image.getPixel(x, y, 0) + (int)image.getPixel(x, y, 1) + (int)image.getPixel(x, y, 2);
         value /= 3;
         value <= threshold ? value = 0 : value = 255;
-        img->setPixel(x, y, 0, (unsigned char)value);
-        img->setPixel(x, y, 1, (unsigned char)value);
-        img->setPixel(x, y, 2, (unsigned char)value);
+        image.setPixel(x, y, 0, (unsigned char)value);
+        image.setPixel(x, y, 1, (unsigned char)value);
+        image.setPixel(x, y, 2, (unsigned char)value);
       }
     }
-    editedimage = *img;
+    editedimage = image;
   }
-
-  Image flip(Image img, bool direction)
+  
+  /* Flip: flips the image based on the direction bool its given
+   * when direction = 0, it flips vertically around the X-axis
+   * when direction = 1, it flips horizontally around the Y-axis.*/
+  void flip(bool direction)
   {
-    Image flipped = img;
+    Image flipped = image;
     if (direction)
     {
       for (int x = 0; x < flipped.width; x++)
@@ -86,7 +93,7 @@ public:
         {
           for (int k = 0; k < 3; k++)
           {
-            flipped.setPixel(x, y, k, img.getPixel(img.width - x, y, k));
+            flipped.setPixel(x, y, k, image.getPixel(image.width - x, y, k));
           }
         }
       }
@@ -99,12 +106,13 @@ public:
         {
           for (int k = 0; k < 3; k++)
           {
-            flipped.setPixel(x, y, k, img.getPixel(x, img.height - y, k));
+            flipped.setPixel(x, y, k, image.getPixel(x, image.height - y, k));
           }
         }
       }
     }
-    return flipped;
+    image = flipped;
+    editedimage = image;
   }
 
   void negative(Image temp)
@@ -238,7 +246,7 @@ int main()
       {
       case 1:
 
-        filtermaker.grayscale(&image);
+        filtermaker.grayscale();
 
         break;
 
@@ -249,7 +257,7 @@ int main()
         int threshold;
         cin >> threshold;
 
-        filtermaker.blackandwhite(&image, threshold);
+        filtermaker.blackandwhite(threshold);
 
         break;
 
@@ -266,7 +274,7 @@ int main()
         int dir;
         cin >> dir;
 
-        editedimage = filtermaker.flip(image, (bool)(dir - 1));
+        filtermaker.flip((bool)(dir - 1));
 
         break;
 
