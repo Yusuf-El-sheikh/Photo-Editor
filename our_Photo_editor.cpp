@@ -107,7 +107,10 @@ public:
     return flipped;
   }
 
-  void negative(Image temp) /* This code chunk basically iterates over each pixel then over each colour channel  */
+  void negative(Image temp)
+
+  /* This code chunk basically iterates over each pixel then over each colour channel*/ 
+  /*and then it takes the values and subtract them from 255 to get the negative effect */
   {
     temp = image;
 
@@ -130,6 +133,9 @@ public:
 
   void rotate()
   {
+
+   /*This function rotates the image 90 degrees clockwise and it does so by swapping the height and width of the original*/
+   /*then it puts the upper layer of pixels in the right most side of the swapped image and then it iterates over all layers untill its done*/
     int nw = image.height, nh = image.width;
 
     Image rot(nw, nh);
@@ -175,10 +181,15 @@ void save()
     cin >> imagename2;
 
     editedimage.saveImage(imagename2);
+
+    cout << "Copy saved successfully!\n";
   }
   else if(savechoice == 2)
   {
     editedimage.saveImage(imagename);
+
+    cout << "Image saved successfully! \n";
+    
   }
 }
 
