@@ -164,6 +164,25 @@ public:
 
     editedimage = image;
   }
+
+  void darkenlighten(int percent){
+      for(int y = 0; y < image.height; y++){
+        for(int x = 0; x < image.width; x++){
+          for(int k = 0; k < 3; k++){
+            if((image(x, y, k)+1*percent <= 255) && (image(x, y, k)+1*percent>=0) ){
+            image(x, y, k)+=1*percent;
+            }
+            else if(image(x,y,k)+1*percent > 255){
+              image(x,y,k) = 255;
+            }
+            else if((int)(image(x,y,k)+1*percent) < 0){
+              image(x,y,k) = 0;
+            }
+          }
+        }
+    }
+    editedimage = image;
+  }
 };
 
 void save()
@@ -239,6 +258,8 @@ int main()
 
       cout << "6. Rotate\n";
 
+      cout<< "7. Darken or Ligten\n"
+
       int filterchoice;
       cin >> filterchoice;
 
@@ -299,6 +320,17 @@ int main()
         }
 
         break;
+      case 7:
+        cout<<"Ligten or darken?\n1. Ligten\n2.Darken";
+        int mod; cin>>mod;
+        cout<<"How much? (0-255)\n";
+        int percent cin>>percent;
+        if(mod==1){
+          filtermaker.darkenlighten(percent);
+        }
+        else if(mod==2){
+          filtermaker.darkenlighten(percent * -1);
+        }
       }
 
       cout << "\nFilter applied successfully!\n";
