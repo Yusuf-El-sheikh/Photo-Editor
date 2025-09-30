@@ -1,3 +1,28 @@
+/*
+  CS213 - Object Oriented Programming
+  Assignment #1 - First submission
+
+  Kyrillos Samy Riad    20240430
+  Youssef
+  Ahmed Wessam Abd-el-Magid    20240060
+
+  Filters made by:
+  Kyrillos - Black and white, Flip
+  Youssef - Negative, Rotate
+  Ahmed - Grayscale, Darken and Lighten
+
+  This program can load an image and apply one or more visual filters to it.
+  There are currently 6 available filters:
+  Grayscale, Black and white, Flip, Darken/Lighten, Negative color, and rotate.
+  The user chooses to load an image and then can apply any of these filters
+  to it.
+  The filters stack, so if the user applies a filter, and then applies another
+  one right after, the two filters will stack.
+  After the user is done, they can choose to save the image using the same
+  filename, or in a new file.
+ */
+
+
 #include <bits/stdc++.h>
 #include "Image_Class.h"
 using namespace std;
@@ -5,8 +30,6 @@ using namespace std;
 string imagename;
 
 Image image;
-
-Image editedimage;
 
 void load()
 {
@@ -22,8 +45,6 @@ void load()
   try
   {
     image.loadNewImage(imagename);
-
-    editedimage = image ;
 
     cout << "Image loaded successfully\n";
   }
@@ -56,8 +77,8 @@ public:
         }
       }
     }
-    editedimage = image;
   }
+
   /* Same as the the grayscale filter, but the function takes a threshold
    * if the average value of a pixel is below that threshold, it becomes black,
    * and if its above, it become white.*/
@@ -76,7 +97,6 @@ public:
         image.setPixel(x, y, 2, (unsigned char)value);
       }
     }
-    editedimage = image;
   }
   
   /* Flip: flips the image based on the direction bool its given
@@ -112,15 +132,14 @@ public:
       }
     }
     image = flipped;
-    editedimage = image;
   }
 
-  void negative(Image temp)
+  void negative()
 
   /* This code chunk basically iterates over each pixel then over each colour channel*/ 
   /*and then it takes the values and subtract them from 255 to get the negative effect */
   {
-    temp = image;
+    Image temp = image;
 
     for (int h = 0; h < temp.height; h++)
     {
@@ -134,8 +153,6 @@ public:
         }
       }
     }
-    editedimage = temp;
-
     image = temp ;
   }
 
@@ -162,7 +179,6 @@ public:
     }
     image = rot;
 
-    editedimage = image;
   }
 
   void darkenlighten(int percent){
@@ -181,7 +197,6 @@ public:
           }
         }
     }
-    editedimage = image;
   }
 };
 
@@ -207,13 +222,19 @@ void save()
 
     cin >> imagename2;
 
-    editedimage.saveImage(imagename2);
+
+    try {	
+      image.saveImage(imagename2);
+    }
+    catch (const exception &e) {
+      return;
+    }
 
     cout << "Copy saved successfully!\n";
   }
   else if(savechoice == 2)
   {
-    editedimage.saveImage(imagename);
+    image.saveImage(imagename);
 
     cout << "Image saved successfully! \n";
     
@@ -258,7 +279,7 @@ int main()
 
       cout << "6. Rotate\n";
 
-      cout<< "7. Darken or Ligten\n"
+      cout<< "7. Darken or Ligten\n";
 
       int filterchoice;
       cin >> filterchoice;
@@ -284,7 +305,7 @@ int main()
 
       case 3:
 
-        filtermaker.negative(image);
+        filtermaker.negative();
 
         break;
 
@@ -321,10 +342,10 @@ int main()
 
         break;
       case 7:
-        cout<<"Ligten or darken?\n1. Ligten\n2.Darken";
+        cout<<"Ligten or darken?\n1. Ligten\n2. Darken";
         int mod; cin>>mod;
         cout<<"How much? (0-255)\n";
-        int percent cin>>percent;
+        int percent; cin>>percent;
         if(mod==1){
           filtermaker.darkenlighten(percent);
         }
