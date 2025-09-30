@@ -2,14 +2,16 @@
   CS213 - Object Oriented Programming
   Assignment #1 - First submission
 
-  Kyrillos Samy Riad    20240430
-  Youssef
-  Ahmed Wessam Abd-el-Magid    20240060
+  Kyrillos Samy Riad                     20240430
+  Yusuf Ahmed Abd-el-Sataar El-Sheikh    20242400
+  Ahmed Wessam Abd-el-Magid              20240060
 
   Filters made by:
   Kyrillos - Black and white, Flip
   Youssef - Negative, Rotate
   Ahmed - Grayscale, Darken and Lighten
+
+  Github repo link: https://github.com/Nerdomancer/CS213-Assignment-Photo-Editor
 
   This program can load an image and apply one or more visual filters to it.
   There are currently 6 available filters:
@@ -31,12 +33,23 @@ string imagename;
 
 Image image;
 
+bool imageisloaded = 0;
+
 void load()
 {
   /*image loading function*/
   /*so the function takes the image name from the directory and loads it into the Image variable*/
   /*if the operation was successfull it would give a success message*/
   /*if an error occurs with the image extension or the image name not being in the directory it would send an error message*/
+  
+  if(imageisloaded){
+    cout << "An image is already loaded. Would you like to discard it?\n";
+    cout << "1. Keep   2. Discard\n";
+    int choice; cin>>choice;
+    if(choice == 1){
+      return;
+    }
+  }
 
   cout << "Please enter your image name to apply the filters \n";
 
@@ -45,7 +58,7 @@ void load()
   try
   {
     image.loadNewImage(imagename);
-
+    imageisloaded = 1;
     cout << "Image loaded successfully\n";
   }
   catch (const exception &e)
@@ -180,7 +193,9 @@ public:
     image = rot;
 
   }
-
+  
+  /*
+   * Darken and lighten filter: makes the image darker or lighter by adding (or subtracting) a fixed value from every channel*/
   void darkenlighten(int percent){
       for(int y = 0; y < image.height; y++){
         for(int x = 0; x < image.width; x++){
