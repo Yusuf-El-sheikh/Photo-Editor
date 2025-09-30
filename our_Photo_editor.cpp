@@ -8,7 +8,7 @@
 
   Filters made by:
   Kyrillos - Black and white, Flip
-  Youssef - Negative, Rotate
+  Yusuf - Negative, Rotate
   Ahmed - Grayscale, Darken and Lighten
 
   Github repo link: https://github.com/Nerdomancer/CS213-Assignment-Photo-Editor
@@ -412,3 +412,4 @@ int main()
   }
   return 0;
 }
+
