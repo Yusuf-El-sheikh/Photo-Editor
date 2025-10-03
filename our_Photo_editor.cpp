@@ -213,6 +213,36 @@ public:
         }
     }
   }
+
+  void frame()
+  {
+    double frame_thickness = min(image.width,image.height)*(2.00/100.00) ;
+
+    frame_thickness = (int)frame_thickness ;
+
+    for(int h = 0 ; (h < image.height) ; h++)
+    {
+      for(int w = 0 ; w < image.width ; w++)
+      {
+        if( (h < frame_thickness) || (image.height - 1 - h < frame_thickness) )
+        {
+          image.setPixel(w , h , 0 , 0) ;
+
+          image.setPixel(w , h , 1 , 0) ;
+
+          image.setPixel(w , h , 2 , 255) ;
+        }
+        else if( (w < frame_thickness) || (image.width - 1 - w < frame_thickness) )
+        {
+          image.setPixel(w , h , 0 , 0) ;
+
+          image.setPixel(w , h , 1 , 0) ;
+
+          image.setPixel(w , h , 2 , 255) ;
+        }
+      }
+    }
+  }
 };
 
 void save()
@@ -296,6 +326,8 @@ int main()
 
       cout<< "7. Darken or Ligten\n";
 
+      cout << "9. Add Frame\n";
+
       int filterchoice;
       cin >> filterchoice;
 
@@ -367,6 +399,8 @@ int main()
         else if(mod==2){
           filtermaker.darkenlighten(percent * -1);
         }
+      case 9:
+        filtermaker.frame();
       }
 
       cout << "\nFilter applied successfully!\n";
