@@ -214,6 +214,18 @@ public:
     }
   }
 
+  void crop(int xtop, int ytop, int width, int height){
+    Image crop(width, height);
+    for(int x = xtop; x-xtop<width; x++){
+      for(int y = ytop; y-ytop<height; y++){
+        for(int c = 0; c<3; c++){
+          crop(x-xtop, y-ytop, c) = image(x, y, c);
+        }
+      }
+    }
+    image = crop;
+  }
+
   void frame()
   {
     double frame_thickness = min(image.width,image.height)*(2.00/100.00) ;
@@ -324,7 +336,9 @@ int main()
 
       cout << "6. Rotate\n";
 
-      cout<< "7. Darken or Ligten\n";
+      cout << "7. Darken or Ligten\n";
+      
+      cout << "8. Crop\n";
 
       cout << "9. Add Frame\n";
 
@@ -399,8 +413,22 @@ int main()
         else if(mod==2){
           filtermaker.darkenlighten(percent * -1);
         }
+        break;
+      case 8:
+        int x, y, width, height;
+        cout << "Enter X coordinate of starting point\n";
+        cin>>x;
+        cout << "Enter Y coordinate of starting point\n";
+        cin>>y;
+        cout << "Enter width of crop\n";
+        cin>>width;
+        cout << "Enter height of crop\n";
+        cin>>height;
+        filtermaker.crop(x, y, width, height);
+        break;
       case 9:
         filtermaker.frame();
+        break;
       }
 
       cout << "\nFilter applied successfully!\n";
