@@ -1,3 +1,30 @@
+/*
+  CS213 - Object Oriented Programming
+  Assignment #1 - First submission
+
+  Kyrillos Samy Riad                     20240430
+  Yusuf Ahmed Abd-el-Sataar El-Sheikh    20242400
+  Ahmed Wessam Abd-el-Magid              20240060
+
+  Filters made by:
+  Kyrillos - Black and white, Flip
+  Yusuf - Negative, Rotate
+  Ahmed - Grayscale, Darken and Lighten
+
+  Github repo link: https://github.com/Nerdomancer/CS213-Assignment-Photo-Editor
+
+  This program can load an image and apply one or more visual filters to it.
+  There are currently 6 available filters:
+  Grayscale, Black and white, Flip, Darken/Lighten, Negative color, and rotate.
+  The user chooses to load an image and then can apply any of these filters
+  to it.
+  The filters stack, so if the user applies a filter, and then applies another
+  one right after, the two filters will stack.
+  After the user is done, they can choose to save the image using the same
+  filename, or in a new file.
+ */
+
+
 #include <bits/stdc++.h>
 #include "Image_Class.h"
 using namespace std;
@@ -6,7 +33,7 @@ string imagename;
 
 Image image;
 
-Image editedimage;
+bool imageisloaded = 0;
 
 void load()
 {
@@ -14,6 +41,15 @@ void load()
   /*so the function takes the image name from the directory and loads it into the Image variable*/
   /*if the operation was successfull it would give a success message*/
   /*if an error occurs with the image extension or the image name not being in the directory it would send an error message*/
+  
+  if(imageisloaded){
+    cout << "An image is already loaded. Would you like to discard it?\n";
+    cout << "1. Keep   2. Discard\n";
+    int choice; cin>>choice;
+    if(choice == 1){
+      return;
+    }
+  }
 
   cout << "Please enter your image name to apply the filters \n";
 
@@ -22,9 +58,7 @@ void load()
   try
   {
     image.loadNewImage(imagename);
-
-    editedimage = image ;
-
+    imageisloaded = 1;
     cout << "Image loaded successfully\n";
   }
   catch (const exception &e)
@@ -56,8 +90,8 @@ public:
         }
       }
     }
-    editedimage = image;
   }
+
   /* Same as the the grayscale filter, but the function takes a threshold
    * if the average value of a pixel is below that threshold, it becomes black,
    * and if its above, it become white.*/
@@ -76,7 +110,6 @@ public:
         image.setPixel(x, y, 2, (unsigned char)value);
       }
     }
-    editedimage = image;
   }
   
   /* Flip: flips the image based on the direction bool its given
@@ -112,15 +145,14 @@ public:
       }
     }
     image = flipped;
-    editedimage = image;
   }
 
-  void negative(Image temp)
+  void negative()
 
   /* This code chunk basically iterates over each pixel then over each colour channel*/ 
   /*and then it takes the values and subtract them from 255 to get the negative effect */
   {
-    temp = image;
+    Image temp = image;
 
     for (int h = 0; h < temp.height; h++)
     {
@@ -134,9 +166,46 @@ public:
         }
       }
     }
-    editedimage = temp;
-
     image = temp ;
+  }
+  
+  void merge(Image img2, bool resize){
+    int widths, heights;
+    if(resize == 1){
+      widths = image.width;
+      heights = image.height;
+      Image resizedImg2(widths, heights);
+      for (int y = 0; y < heights; ++y) {
+        for (int x = 0; x < widths; ++x) {
+            int oldX = ((double)x * img2.width / widths);
+            int oldY = ((double)y * img2.height / heights);
+
+            oldX = min(oldX, img2.width - 1);
+            oldY = min(oldY, img2.height - 1);
+            for (int c = 0; c < 3; ++c) {
+                int val = img2.getPixel(oldX, oldY, c);
+                resizedImg2.setPixel(x, y, c, val);
+            }
+        }
+    }
+      img2 = resizedImg2;
+    }
+    else{
+      widths = min(image.width, img2.width);
+      heights = min(image.height, img2.height);
+    }
+    Image merged(widths, heights);
+    for (int y = 0; y < heights; ++y) {
+        for (int x = 0; x < widths; ++x) {
+            for (int c = 0; c < 3; ++c) {
+                int val1 = image.getPixel(x, y, c);
+                int val2 = img2.getPixel(x, y, c);
+                int mergedVal = ((val1 + val2) / 2);
+                merged.setPixel(x, y, c, mergedVal);
+            }
+        }
+    }
+    image = merged;
   }
 
   void rotate()
@@ -162,9 +231,10 @@ public:
     }
     image = rot;
 
-    editedimage = image;
   }
-
+  
+  /*
+   * Darken and lighten filter: makes the image darker or lighter by adding (or subtracting) a fixed value from every channel*/
   void darkenlighten(int percent){
       for(int y = 0; y < image.height; y++){
         for(int x = 0; x < image.width; x++){
@@ -181,7 +251,48 @@ public:
           }
         }
     }
-    editedimage = image;
+  }
+
+  void crop(int xtop, int ytop, int width, int height){
+    Image crop(width, height);
+    for(int x = xtop; x-xtop<width; x++){
+      for(int y = ytop; y-ytop<height; y++){
+        for(int c = 0; c<3; c++){
+          crop(x-xtop, y-ytop, c) = image(x, y, c);
+        }
+      }
+    }
+    image = crop;
+  }
+
+  void frame()
+  {
+    double frame_thickness = min(image.width,image.height)*(2.00/100.00) ;
+
+    frame_thickness = (int)frame_thickness ;
+
+    for(int h = 0 ; (h < image.height) ; h++)
+    {
+      for(int w = 0 ; w < image.width ; w++)
+      {
+        if( (h < frame_thickness) || (image.height - 1 - h < frame_thickness) )
+        {
+          image.setPixel(w , h , 0 , 0) ;
+
+          image.setPixel(w , h , 1 , 0) ;
+
+          image.setPixel(w , h , 2 , 255) ;
+        }
+        else if( (w < frame_thickness) || (image.width - 1 - w < frame_thickness) )
+        {
+          image.setPixel(w , h , 0 , 0) ;
+
+          image.setPixel(w , h , 1 , 0) ;
+
+          image.setPixel(w , h , 2 , 255) ;
+        }
+      }
+    }
   }
 };
 
@@ -207,13 +318,19 @@ void save()
 
     cin >> imagename2;
 
-    editedimage.saveImage(imagename2);
+
+    try {	
+      image.saveImage(imagename2);
+    }
+    catch (const exception &e) {
+      return;
+    }
 
     cout << "Copy saved successfully!\n";
   }
   else if(savechoice == 2)
   {
-    editedimage.saveImage(imagename);
+    image.saveImage(imagename);
 
     cout << "Image saved successfully! \n";
     
@@ -226,6 +343,8 @@ int main()
 
   filter filtermaker;
 
+  string img2filename;
+  Image img2;
   while (true)
   {
     int choice;
@@ -254,11 +373,17 @@ int main()
 
       cout << "3. Negative color\n";
 
+      cout << "4. Merge photos\n";
+
       cout << "5. Flip horizontal/vertical\n";
 
       cout << "6. Rotate\n";
 
-      cout<< "7. Darken or Ligten\n"
+      cout << "7. Darken or Ligten\n";
+      
+      cout << "8. Crop\n";
+
+      cout << "9. Add Frame\n";
 
       int filterchoice;
       cin >> filterchoice;
@@ -284,9 +409,19 @@ int main()
 
       case 3:
 
-        filtermaker.negative(image);
+        filtermaker.negative();
 
         break;
+      case 4:
+        cout << "Enter filename of image you'd like to merge with current image\n";
+        cin>>img2filename;
+        img2.loadNewImage(img2filename);
+        cout << "Would you like to resize this image, or merge the common area?\n";
+        cout << "1. Merge common area   2. Resize the image\n";
+        int resize; cin>>resize;
+        filtermaker.merge(img2, (bool)(resize-1));
+        break;
+
 
       case 5:
 
@@ -321,16 +456,32 @@ int main()
 
         break;
       case 7:
-        cout<<"Ligten or darken?\n1. Ligten\n2.Darken";
+        cout<<"Ligten or darken?\n1. Ligten\n2. Darken";
         int mod; cin>>mod;
         cout<<"How much? (0-255)\n";
-        int percent cin>>percent;
+        int percent; cin>>percent;
         if(mod==1){
           filtermaker.darkenlighten(percent);
         }
         else if(mod==2){
           filtermaker.darkenlighten(percent * -1);
         }
+        break;
+      case 8:
+        int x, y, width, height;
+        cout << "Enter X coordinate of starting point\n";
+        cin>>x;
+        cout << "Enter Y coordinate of starting point\n";
+        cin>>y;
+        cout << "Enter width of crop\n";
+        cin>>width;
+        cout << "Enter height of crop\n";
+        cin>>height;
+        filtermaker.crop(x, y, width, height);
+        break;
+      case 9:
+        filtermaker.frame();
+        break;
       }
 
       cout << "\nFilter applied successfully!\n";
@@ -376,3 +527,4 @@ int main()
   }
   return 0;
 }
+
