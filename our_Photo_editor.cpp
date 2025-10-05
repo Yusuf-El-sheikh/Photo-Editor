@@ -294,6 +294,62 @@ public:
       }
     }
   }
+
+  void blur()
+  {
+    Image blurred(image.width , image.height) ;
+
+    int radius ;
+
+    cout << "Please enter the blur radius :" ;
+
+    cin >> radius ;
+    
+    cout << "\n" ;
+
+    while(radius > max(image.height , image.width))
+    {
+      if(radius > max(image.height , image.width))
+      {
+        cout << "radius too big , please try again \n" ;
+      }
+    }
+
+    for(int h = 0 ; h < image.height ; h++)
+    {
+      for(int w = 0 ; w < image.width ; w++)
+      {
+        for(int c = 0 ; c < 3 ; c++)
+        {
+          int avg_color = 0 ;
+
+          int higehst = max(h - radius , 0) ;
+
+          int lowest = min(h + radius , image.height-1) ;
+
+          int rightmost = min(w + radius , image.width-1) ;
+
+          int leftmost = max(w - radius , 0) ;
+
+          for(int i = higehst ; i <= lowest ; i++)
+          {
+
+            for(int j = leftmost ; j <= rightmost ; j++)
+            {
+              avg_color += image.getPixel(j , i , c) ;
+            }
+
+          }
+
+          avg_color = avg_color / ((lowest - higehst + 1)*(rightmost - leftmost + 1)) ;
+
+          blurred.setPixel(w , h , c , avg_color) ;
+        }
+      }
+    }
+
+    image = blurred ;
+  }
 };
 
 void save()
@@ -385,6 +441,8 @@ int main()
 
       cout << "9. Add Frame\n";
 
+      cout << "12. Blur\n" ;
+
       int filterchoice;
       cin >> filterchoice;
 
@@ -455,6 +513,7 @@ int main()
         }
 
         break;
+      
       case 7:
         cout<<"Ligten or darken?\n1. Ligten\n2. Darken";
         int mod; cin>>mod;
@@ -467,6 +526,7 @@ int main()
           filtermaker.darkenlighten(percent * -1);
         }
         break;
+      
       case 8:
         int x, y, width, height;
         cout << "Enter X coordinate of starting point\n";
@@ -479,8 +539,13 @@ int main()
         cin>>height;
         filtermaker.crop(x, y, width, height);
         break;
+      
       case 9:
         filtermaker.frame();
+        break;
+      
+      case 12:
+        filtermaker.blur();
         break;
       }
 
