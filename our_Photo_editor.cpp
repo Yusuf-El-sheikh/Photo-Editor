@@ -69,11 +69,6 @@ void load()
 
 class filter
 {
-private:
-  int intensitydiff(Image img){
-    
-  }
-
 
 public:
   /* grayscale filter: goes over every pixel, gets the average of the RGB channels and 
@@ -400,6 +395,30 @@ public:
     image = blurred ;
   }
 
+  void old_tv()
+  {
+    for(int h = 0 ; h < image.height ; h += 5)
+    {
+      for(int w = 0 ; w < image.width ; w++)
+      {
+      
+        image.setPixel(w , h , 0 , 0);
+
+        image.setPixel(w , h , 1 , 0);
+        
+        image.setPixel(w , h , 2 , 0);
+
+        image.setPixel(w , h + 1 , 0 , 0);
+        
+        image.setPixel(w , h + 1 , 1 , 0);
+        
+        image.setPixel(w , h + 1 , 2 , 0);
+      
+      }
+    }
+    darkenlighten(30);
+  }
+
   void infrared()
   {
     grayscale();
@@ -532,6 +551,8 @@ int main()
 
       cout << "12. Blur\n" ;
 
+      cout << "15. Old TV\n";
+
       cout << "16. Cold\n" ; 
 
       cout << "17. Infrared\n" ;
@@ -656,6 +677,10 @@ int main()
         filtermaker.blur();
         break;
       
+      case 15:
+        filtermaker.old_tv();
+        break;
+
       case 16:
         filtermaker.purple();
         break;
