@@ -69,6 +69,12 @@ void load()
 
 class filter
 {
+private:
+  int intensitydiff(Image img){
+    
+  }
+
+
 public:
   /* grayscale filter: goes over every pixel, gets the average of the RGB channels and 
    * sets them to that average, making it grayscale.*/
@@ -294,6 +300,49 @@ public:
       }
     }
   }
+  
+  void edgedetection(int sens){
+    Image edges(image.width-1, image.height-1);
+    for(int x = 0; x<edges.width; x++){
+      for(int y = 0; y<edges.height; y++){
+        int diff = 0;
+        for(int c = 0; c<3; c++){
+          diff+=abs(image(x, y, c)-image(x+1, y, c));
+          diff+=abs(image(x, y, c)-image(x, y+1, c));
+        }
+        if(diff>sens){
+          for(int c = 0; c<3; c++){
+            edges(x, y, c) = 255;
+          }
+        }
+        else{
+          for(int c = 0; c<3; c++){
+            edges(x, y, c) = 0;
+          }
+        }
+      }
+    }
+    image = edges;
+  } 
+
+  void resize(int width, int height){
+      Image resizedImg(width, height);
+      for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            int oldX = ((double)x * image.width / width);
+            int oldY = ((double)y * image.height / height);
+
+            oldX = min(oldX, image.width - 1);
+            oldY = min(oldY, image.height - 1);
+            for (int c = 0; c < 3; ++c) {
+                int val = image.getPixel(oldX, oldY, c);
+                resizedImg.setPixel(x, y, c, val);
+            }
+        }
+
+      }
+      image = resizedImg;
+  }
 
   void blur()
   {
@@ -477,6 +526,10 @@ int main()
 
       cout << "9. Add Frame\n";
 
+      cout << "10. Detect edges\n";
+      
+      cout << "11. Resize\n";
+
       cout << "12. Blur\n" ;
 
       cout << "16. Cold\n" ; 
@@ -583,7 +636,22 @@ int main()
       case 9:
         filtermaker.frame();
         break;
+
+      case 10:
+        cout << "Enter deadzone (reverse sensitivity, less is more sensitive. 50-70 recommended.):\n";
+        int sens; cin>>sens;
+        filtermaker.edgedetection(sens);
+        break;
       
+      case 11:
+        int wid, hig;
+        cout << "Enter width of new image:\n";
+        cin >> wid;
+        cout << "Enter height of new image:\n";
+        cin >> hig;
+        filtermaker.resize(wid, hig);
+        break;
+
       case 12:
         filtermaker.blur();
         break;
