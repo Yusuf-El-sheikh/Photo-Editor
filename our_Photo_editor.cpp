@@ -361,11 +361,11 @@ public:
     {
       for(int w = 0 ; w < image.width ; w++)
       {
-        image.setPixel(w , h , 0 , image.getPixel(w , h , 0) + 50 ) ;
+        image.setPixel(w , h , 0 , image.getPixel(w , h , 0)*2) ;
 
-        image.setPixel(w , h , 1 , image.getPixel(w , h , 1)*0.5) ;
+        image.setPixel(w , h , 1 , image.getPixel(w , h , 1)*0.6) ;
 
-        image.setPixel(w , h , 2 , image.getPixel(w , h , 2)*0.5) ;
+        image.setPixel(w , h , 2 , image.getPixel(w , h , 2)*0.6) ;
         
         if(image.getPixel(w , h , 0) == 0 || image.getPixel(w , h , 1) <= 60 || image.getPixel(w , h , 2) <= 150)
         {
