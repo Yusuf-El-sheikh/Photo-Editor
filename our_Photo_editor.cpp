@@ -361,7 +361,7 @@ public:
     {
       for(int w = 0 ; w < image.width ; w++)
       {
-        image.setPixel(w , h , 0 , image.getPixel(w , h , 0)*2) ;
+        image.setPixel(w , h , 0 , image.getPixel(w , h , 0)*2 ) ;
 
         image.setPixel(w , h , 1 , image.getPixel(w , h , 1)*0.6) ;
 
@@ -369,11 +369,22 @@ public:
         
         if(image.getPixel(w , h , 0) == 0 || image.getPixel(w , h , 1) <= 60 || image.getPixel(w , h , 2) <= 150)
         {
-          image.setPixel(w , h , 0 , 100) ;
+          image.setPixel(w , h , 0 , 150) ;
         }
       }
     } 
 
+  }
+
+  void purple()
+  {
+    for(int h = 0 ; h < image.height ; h++)
+    {
+      for(int w = 0 ; w < image.width ; w++)
+      {
+        image.setPixel(w , h , 1 , image.getPixel(w , h , 1)*0.7) ;
+      }
+    }
   }
 };
 
@@ -467,6 +478,8 @@ int main()
       cout << "9. Add Frame\n";
 
       cout << "12. Blur\n" ;
+
+      cout << "16. Cold\n" ; 
 
       cout << "17. Infrared\n" ;
 
@@ -575,6 +588,10 @@ int main()
         filtermaker.blur();
         break;
       
+      case 16:
+        filtermaker.purple();
+        break;
+
       case 17:
         filtermaker.infrared();
         break ;
