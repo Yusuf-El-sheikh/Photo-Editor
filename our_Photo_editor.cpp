@@ -338,6 +338,21 @@ public:
       }
       image = resizedImg;
   }
+  
+  void sunlight(){
+    for(int x = 0; x<image.width; x++){
+      for(int y = 0; y<image.height; y++){
+        for(int c = 0; c<2; c++){
+          if(image(x,y,c)+20 <= 255){
+            image(x, y, c) += 20;
+          }
+          else{
+            image(x, y, c) = 255;
+          }
+        }
+      }
+    }
+  }
 
   void blur()
   {
@@ -551,6 +566,8 @@ int main()
 
       cout << "12. Blur\n" ;
 
+      cout << "13. Sunlight";
+
       cout << "15. Old TV\n";
 
       cout << "16. Cold\n" ; 
@@ -677,6 +694,10 @@ int main()
         filtermaker.blur();
         break;
       
+      case 13:
+        filtermaker.sunlight();
+        break;
+
       case 15:
         filtermaker.old_tv();
         break;
