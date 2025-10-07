@@ -27,6 +27,9 @@
 
 #include <bits/stdc++.h>
 #include "Image_Class.h"
+
+#define PI 3.14159
+
 using namespace std;
 
 string imagename;
@@ -469,6 +472,21 @@ public:
       }
     }
   }
+
+  void skew(int degree){
+    double slope = tan(degree*(PI/180));
+    Image skew((image.width+((slope)*image.height))+10, image.height);
+    double start = skew.width - image.width;
+    for(int y = 0; y<image.height; y++){
+        for(int x = 0; x<image.width; x++){
+          for(int c = 0; c<3; c++){
+            skew(x+(int)start, y, c) = image(x, y ,c);
+          }
+        }
+        start-=slope;
+    }
+    image = skew;
+  }
 };
 
 void save()
@@ -566,13 +584,15 @@ int main()
 
       cout << "12. Blur\n" ;
 
-      cout << "13. Sunlight";
+      cout << "13. Sunlight\n";
 
       cout << "15. Old TV\n";
 
       cout << "16. Cold\n" ; 
 
       cout << "17. Infrared\n" ;
+
+      cout << "18. Skew\n";
 
       int filterchoice;
       cin >> filterchoice;
@@ -709,7 +729,13 @@ int main()
       case 17:
         filtermaker.infrared();
         break ;
+      case 18:
+        cout << "Enter degree:\n";
+        int degree; cin >> degree;
+        filtermaker.skew(degree);
+        break;
       }
+
 
       cout << "\nFilter applied successfully!\n";
     }
