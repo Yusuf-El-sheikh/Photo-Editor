@@ -466,6 +466,8 @@ public:
       }
     } 
 
+    darkenlighten(30) ;
+
   }
 
   void purple()
@@ -492,6 +494,72 @@ public:
         start-=slope;
     }
     image = skew;
+  }
+
+  void oil_paint()
+  {
+    double rad = min(image.width,image.height)*(2.00/100.00) ;
+
+    int radius = int(radius) ;
+
+    Image temp = image ;
+
+    // i will cut the 255 levels if brightness into 10 levels
+    
+    for(int h = 0 ; h < image.height ; h++)
+    {
+      for(int w = 0 ; w < image.width ; w++)
+      {
+        int higehst = max(h - radius , 0) ;
+
+        int lowest = min(h + radius , image.height-1) ;
+
+        int rightmost = min(w + radius , image.width-1) ;
+
+        int leftmost = max(w - radius , 0) ;
+
+        int max_index ;
+
+        int intensity[10] = {0} ; // 0 >> 25 // 26 >> 51 // 51 >> 76 // 76 >> 101 // 101 >> 126 // 126 >> 151 // 151 >> 176 // 176 >> 201 // 201 >> 226 // 226 >> 255 //
+
+        int red[10] = {0} ;
+
+        int green[10] = {0} ;
+
+        int blue[10] = {0} ;
+
+        for(int i = higehst ; i <= lowest ; i++)
+        {
+          for(int j = leftmost ; j <= rightmost ; j++)
+          {
+            int avg = (temp.getPixel(j , i , 0) + temp.getPixel(j , i , 1) + temp.getPixel(j , i , 2)) / 3 ;
+            
+            intensity[avg/26]++ ;
+
+            red[avg/26] += temp.getPixel(j , i , 0) ;
+
+            green[avg/26] += temp.getPixel(j , i , 1) ;
+
+            blue[avg/26] += temp.getPixel(j , i , 2) ;
+
+          }
+        }
+        max_index = max_element(intensity, intensity + 10) - intensity ;
+
+        int avg_red = red[max_index] / intensity[max_index] ;
+
+        int avg_green = green[max_index] / intensity[max_index] ;
+
+        int avg_blue = blue[max_index] / intensity[max_index] ;
+      
+        image.setPixel(w , h , 0 , avg_red) ;
+
+        image.setPixel(w , h , 1 , avg_green) ;
+        
+        image.setPixel(w , h , 2 , avg_blue) ;
+      
+      }
+    }
   }
 };
 
@@ -591,6 +659,8 @@ int main()
       cout << "12. Blur\n" ;
 
       cout << "13. Sunlight\n";
+
+      cout << "14. Oil paint\n";
 
       cout << "15. Old TV\n";
 
@@ -722,6 +792,10 @@ int main()
       
       case 13:
         filtermaker.sunlight();
+        break;
+
+      case 14:
+        filtermaker.oil_paint();
         break;
 
       case 15:
