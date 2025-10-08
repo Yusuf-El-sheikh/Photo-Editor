@@ -2,16 +2,22 @@
   CS213 - Object Oriented Programming
   Assignment #1 - First submission
 
-  Kyrillos Samy Riad                     20240430
-  Yusuf Ahmed Abd-el-Sataar El-Sheikh    20242400
-  Ahmed Wessam Abd-el-Magid              20240060
+  Kyrillos Samy Riad                     20240430   S31
+  Yusuf Ahmed Abd-el-Sataar El-Sheikh    20242400   S5/S6
+  Ahmed Wessam Abd-el-Magid              20240060   S24
 
   Filters made by:
-  Kyrillos - Black and white, Flip
-  Yusuf - Negative, Rotate
-  Ahmed - Grayscale, Darken and Lighten
+  Kyrillos - Black and white, Flip, Resize, Crop
+  Yusuf - Negative, Rotate, Blur, Frame
+  Ahmed - Grayscale, Darken and Lighten, Merge, Edge detection
+
+  Bonus filters were made by everyone.
 
   Github repo link: https://github.com/Nerdomancer/CS213-Assignment-Photo-Editor
+
+  Program Demo Video: https://drive.google.com/file/d/16vyRf4hlGhJUqWyHpaVCrFI-Gp-bWkem/view?usp=drive_link
+  
+  Detail Document: https://docs.google.com/document/d/1fsb5QljHz4kYiYCXy8tVLqw8Sapaje1AnSkUNLeQB0M/edit?usp=drive_link
 
   This program can load an image and apply one or more visual filters to it.
   There are currently 6 available filters:
@@ -83,7 +89,7 @@ public:
       for (int j = 0; j < image.height; j++)
       {
         unsigned int num = 0;
-        for (int k = 0; k < image.channels; k++)
+        for (int k = 0; k < 3; k++)
         {
           num += image(i, j, k);
         }
@@ -162,7 +168,7 @@ public:
     {
       for (int w = 0; w < temp.width; w++)
       {
-        for (int c = 0; c < temp.channels; c++)
+        for (int c = 0; c < 3; c++)
         {
           unsigned char val = temp.getPixel(w, h, c);
 
@@ -225,7 +231,7 @@ public:
     {
       for (int w = 0; w < image.width; w++)
       {
-        for (int c = 0; c < image.channels; c++)
+        for (int c = 0; c < 3; c++)
         {
           unsigned char val = image.getPixel(w, h, c);
 
