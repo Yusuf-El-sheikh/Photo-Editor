@@ -3,7 +3,7 @@
   Assignment #1 - First submission
 
   Kyrillos Samy Riad                     20240430   S31
-  Yusuf Ahmed Abd-el-Sataar El-Sheikh    20242400   S5/S6
+  Yusuf Ahmed Abd-el-Sataar El-Sheikh    20242400   S6
   Ahmed Wessam Abd-el-Magid              20240060   S24
 
   Filters made by:
@@ -20,8 +20,10 @@
   Detail Document: https://docs.google.com/document/d/1fsb5QljHz4kYiYCXy8tVLqw8Sapaje1AnSkUNLeQB0M/edit?usp=drive_link
 
   This program can load an image and apply one or more visual filters to it.
-  There are currently 6 available filters:
-  Grayscale, Black and white, Flip, Darken/Lighten, Negative color, and rotate.
+  There are currently 18 available filters:
+  Grayscale, Black and white, Flip, Darken/Lighten, Negative color, Rotate, Merge,
+  Crop, Add Frame, Detect Edges, Resize, Blur, Sunlight, Oil paint, Old TV, Cold,
+  Infrared, and Skew.
   The user chooses to load an image and then can apply any of these filters
   to it.
   The filters stack, so if the user applies a filter, and then applies another
